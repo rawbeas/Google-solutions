@@ -1,25 +1,99 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
+import {
+  motion,
+  useAnimation,
+  useScroll,
+  useSpring,
+  useReducedMotion,
+} from "framer-motion";
 
 const DataStatsSection = () => {
-  return (
-    <div className="w-full bg-gradient-to-r from-orange-500 to-red-400 py-16 mt-40">
-      <div className="container mx-auto px-4 text-center text-white">
-        <h2 className="text-4xl font-bold mb-4">
-          Back your decisions with data
-        </h2>
+  const sectionRef = useRef(null);
+  const controls = useAnimation();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+  const shouldReduceMotion = useReducedMotion();
 
-        <p className="max-w-3xl mx-auto mb-2">
+  useEffect(() => {
+    const unsubscribe = smoothProgress.onChange((latest) => {
+      if (latest > 0.1) {
+        controls.start("visible");
+      } else {
+        controls.start("hidden");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [controls, smoothProgress]);
+
+  const sectionVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: shouldReduceMotion ? 0 : 0.8,
+        ease: "easeOut",
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: shouldReduceMotion ? 0 : 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  return (
+    <motion.div
+      ref={sectionRef}
+      className="w-full bg-gradient-to-r from-orange-500 to-red-400 py-16 mt-40"
+      initial="hidden"
+      animate={controls}
+      variants={sectionVariants}
+      style={{ scrollMarginTop: "80px" }}
+      willChange="transform, opacity"
+    >
+      <motion.div
+        className="container mx-auto px-4 text-center text-white"
+        variants={itemVariants}
+      >
+        <motion.h2 className="text-4xl font-bold mb-4" variants={itemVariants}>
+          Back your decisions with data
+        </motion.h2>
+
+        <motion.p className="max-w-3xl mx-auto mb-2" variants={itemVariants}>
           Join the ranks of elite football clubs and referee federations all
           over the world.
-        </p>
-        <p className="max-w-3xl mx-auto mb-10">
+        </motion.p>
+        <motion.p className="max-w-3xl mx-auto mb-10" variants={itemVariants}>
           Monitor your athletes' performance and be part of these stats.
-        </p>
+        </motion.p>
 
-        <div className="bg-white rounded-lg shadow-lg p-10 max-w-5xl mx-auto">
+        <motion.div
+          className="bg-white rounded-lg shadow-lg p-10 max-w-5xl mx-auto"
+          variants={itemVariants}
+        >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Total Distance Registered */}
-            <div className="flex flex-col items-center">
+            <motion.div
+              className="flex flex-col items-center"
+              variants={itemVariants}
+            >
               <div className="bg-orange-500 rounded-full p-5 mb-4">
                 <svg
                   className="w-8 h-8 text-white"
@@ -38,10 +112,13 @@ const DataStatsSection = () => {
               <p className="text-sm font-semibold text-gray-700 mt-2">
                 TOTAL DISTANCE REGISTERED
               </p>
-            </div>
+            </motion.div>
 
             {/* Athletes' Performance Monitored */}
-            <div className="flex flex-col items-center">
+            <motion.div
+              className="flex flex-col items-center"
+              variants={itemVariants}
+            >
               <div className="bg-orange-500 rounded-full p-5 mb-4">
                 <svg
                   className="w-8 h-8 text-white"
@@ -60,10 +137,13 @@ const DataStatsSection = () => {
               <p className="text-sm font-semibold text-gray-700 mt-2">
                 ATHLETES' PERFORMANCE MONITORED
               </p>
-            </div>
+            </motion.div>
 
             {/* Training Sessions Analysed */}
-            <div className="flex flex-col items-center">
+            <motion.div
+              className="flex flex-col items-center"
+              variants={itemVariants}
+            >
               <div className="bg-orange-500 rounded-full p-5 mb-4">
                 <svg
                   className="w-8 h-8 text-white"
@@ -82,11 +162,11 @@ const DataStatsSection = () => {
               <p className="text-sm font-semibold text-gray-700 mt-2">
                 TRAINING SESSIONS ANALYSED
               </p>
-            </div>
+            </motion.div>
           </div>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };
 

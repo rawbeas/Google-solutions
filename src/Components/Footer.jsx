@@ -1,14 +1,71 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
+import {
+  motion,
+  useAnimation,
+  useScroll,
+  useSpring,
+  useReducedMotion,
+} from "framer-motion";
 
 const Footer = () => {
+  const footerRef = useRef(null);
+  const controls = useAnimation();
+  const { scrollYProgress } = useScroll({
+    target: footerRef,
+    offset: ["start end", "end start"],
+  });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const unsubscribe = smoothProgress.onChange((latest) => {
+      if (latest > 0.1) {
+        controls.start("visible");
+        document.body.classList.add("footer-in-view");
+      } else {
+        controls.start("hidden");
+        document.body.classList.remove("footer-in-view");
+      }
+    });
+
+    return () => {
+      unsubscribe();
+      document.body.classList.remove("footer-in-view");
+    };
+  }, [controls, smoothProgress]);
+
+  const footerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: shouldReduceMotion ? 0 : 0.8,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
-    <footer className="mt-40 bg-slate-700 text-white py-16 pt-30">
+    <motion.footer
+      ref={footerRef}
+      className="mt-40 bg-slate-700 text-white py-16 pt-30"
+      initial="hidden"
+      animate={controls}
+      variants={footerVariants}
+      style={{ scrollMarginTop: "80px" }}
+      willChange="transform, opacity"
+    >
       <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+        <div className="flex flex-col items-center ">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-40 text-center">
             {/* Topsportslab Column */}
             <div>
-              <h3 className="font-bold text-lg  mb-6">Topsportslab</h3>
+              <h3 className="font-bold text-lg  mb-6">Dashboard</h3>
               <ul className="space-y-4">
                 <li>
                   <a href="#" className="text-orange-400 hover:underline">
@@ -78,7 +135,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 };
 

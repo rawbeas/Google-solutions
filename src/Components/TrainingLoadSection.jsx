@@ -1,22 +1,37 @@
 import React, { useEffect } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
+import {
+  motion,
+  useAnimation,
+  useScroll,
+  useSpring,
+  useReducedMotion,
+} from "framer-motion";
 
 const TrainingLoadSection = () => {
   const controls = useAnimation();
   const ref = React.useRef(null);
-  const inView = useInView(ref, {
-    amount: 0.1,
-    threshold: 0,
-    triggerOnce: false,
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
   });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
-    if (inView) {
-      controls.start("visible");
-    } else {
-      controls.start("hidden");
-    }
-  }, [controls, inView]);
+    const unsubscribe = smoothProgress.onChange((latest) => {
+      if (latest > 0.1) {
+        controls.start("visible");
+      } else {
+        controls.start("hidden");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [controls, smoothProgress]);
 
   const containerVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -24,7 +39,7 @@ const TrainingLoadSection = () => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.8,
+        duration: shouldReduceMotion ? 0 : 0.8,
         ease: "easeOut",
         staggerChildren: 0.15,
       },
@@ -37,7 +52,7 @@ const TrainingLoadSection = () => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
+        duration: shouldReduceMotion ? 0 : 0.6,
         ease: "easeOut",
       },
     },
@@ -50,6 +65,8 @@ const TrainingLoadSection = () => {
       initial="hidden"
       animate={controls}
       variants={containerVariants}
+      style={{ scrollMarginTop: "80px" }}
+      willChange="transform, opacity"
     >
       <motion.h2
         className="text-3xl text-center font-bold text-gray-800 mb-10"
