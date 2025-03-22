@@ -7,9 +7,8 @@ const TrainingLoadSection = () => {
   const inView = useInView(ref, {
     amount: 0.1,
     threshold: 0,
-    triggerOnce: false, 
+    triggerOnce: false,
   });
-
 
   useEffect(() => {
     if (inView) {
@@ -53,14 +52,14 @@ const TrainingLoadSection = () => {
       variants={containerVariants}
     >
       <motion.h2
-        className="text-3xl text-center font-bold text-gray-800 mb-4"
+        className="text-3xl text-center font-bold text-gray-800 mb-10"
         variants={itemVariants}
       >
         Monitor the training load of your athletes
       </motion.h2>
 
       <motion.p
-        className=" text-gray-600 text-center mb-6 max-w-4xl mx-auto  items-center justify-center "
+        className="text-gray-600 text-center mb-10 max-w-4xl mx-auto items-center justify-center"
         variants={itemVariants}
       >
         Use our Performance Management tools to monitor the training load of
@@ -79,7 +78,7 @@ const TrainingLoadSection = () => {
         <img
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-mIf7kB5aMzt6mcFimcVXyuHBhuAJoCUnd_Rv-Gyjm4V4HXObnAfQYdys6_6aph6BATo&usqp=CAU"
           alt="Training Load Management"
-          className="max-w-full md:max-w-2xl rounded-lg shadow-lg"
+          className="max-w-2xl w-full rounded-lg shadow-lg"
         />
       </motion.div>
     </motion.div>
