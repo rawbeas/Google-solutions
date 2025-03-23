@@ -7,6 +7,8 @@ import {
   useReducedMotion,
 } from "framer-motion";
 
+import { Link } from "react-router-dom";
+
 const Footer = () => {
   const footerRef = useRef(null);
   const controls = useAnimation();
@@ -112,9 +114,11 @@ const Footer = () => {
               <h3 className="font-bold text-lg mb-6">Contact</h3>
               <p className="mb-2">We'd love to hear from you!</p>
               <p className="mb-6">Questions or suggestions?</p>
-              <button className="bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-6 rounded transition duration-300">
-                CONTACT US
-              </button>
+              <Link to="/aboutus">
+                <button className="bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-6 rounded transition duration-300">
+                  About us
+                </button>
+              </Link>
             </div>
           </div>
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const AthleteManagementSection = () => {
   const controls = useAnimation();
@@ -79,14 +80,16 @@ const AthleteManagementSection = () => {
           decision-making.
         </motion.p>
 
-        <motion.button
-          className="bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-md transition duration-300"
-          variants={itemVariants}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Log In
-        </motion.button>
+        <Link to="/login">
+          <motion.button
+            className="bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-md transition duration-300"
+            variants={itemVariants}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Log In
+          </motion.button>
+        </Link>
       </motion.div>
 
       <motion.div className="md:w-1/2 mt-8 md:mt-0" variants={itemVariants}>

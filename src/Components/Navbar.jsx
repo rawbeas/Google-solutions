@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { AiOutlineMenu } from "react-icons/ai";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [menu, setMenu] = useState(false);
@@ -15,7 +16,7 @@ const Navbar = () => {
     { id: 1, text: "Home", to: "/" },
     { id: 2, text: "Services", to: "/services" },
     { id: 3, text: "Work", to: "/work" },
-    { id: 4, text: "Contact", to: "/contact" },
+    { id: 4, text: "About Us", to: "/aboutus" },
   ];
 
   return (
@@ -37,18 +38,18 @@ const Navbar = () => {
         <ul className="hidden md:flex items-center space-x-6 list-none lg:text-base">
           {items.map(({ id, text, to }) => (
             <li key={id} className="hover:text-purple-500 cursor-pointer">
-              <a href={to}>{text}</a>
+              <Link to={to}>{text}</Link>
             </li>
           ))}
         </ul>
 
         {/* Download CV Button */}
-        <a
-          href="#"
+        <Link
+          to="/signup"
           className="md:text-base lg:text-lg bg-purple-500 mr-10 hover:bg-purple-400 px-4 py-2 rounded"
         >
           Sign Up
-        </a>
+        </Link>
       </motion.div>
 
       {/* Mobile Navbar */}
@@ -94,16 +95,16 @@ const Navbar = () => {
                       key={id}
                       className="hover:text-purple-500 duration-200 cursor-pointer"
                     >
-                      <a href={to}>{text}</a>
+                      <Link to={to}>{text}</Link>
                     </li>
                   ))}
                 </ul>
-                <a
-                  href="#"
+                <Link
+                  to="/signup"
                   className="mt-6 text-lg bg-purple-500 hover:bg-purple-400 px-4 py-2 rounded text-white"
                 >
                   Sign Up
-                </a>
+                </Link>
               </div>
             )}
           </motion.div>
