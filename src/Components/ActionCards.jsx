@@ -105,7 +105,7 @@ const ActionCards = () => {
         {cards.slice(0, 3).map((card, index) => (
           <div
             key={index}
-            className="bg-gray-500 rounded-lg p-4 h-24 flex flex-col items-center justify-center text-white cursor-pointer hover:bg-gray-600 transition-colors"
+            className="bg-gray-500 rounded-lg p-4 h-24 flex flex-col items-center justify-center text-white cursor-pointer hover:bg-gray-600 transition-all duration-300 transform hover:scale-110 overflow-hidden"
           >
             {card.icon}
             <span className="mt-2 text-sm font-medium">{card.title}</span>
@@ -116,7 +116,7 @@ const ActionCards = () => {
         {cards.slice(3, 5).map((card, index) => (
           <div
             key={index}
-            className="bg-gray-500 rounded-lg p-4 h-24 flex flex-col items-center justify-center text-white cursor-pointer hover:bg-gray-600 transition-colors"
+            className="bg-gray-500 rounded-lg p-4 h-24 flex flex-col items-center justify-center text-white cursor-pointer hover:bg-gray-600 transition-all duration-300 transform hover:scale-110 overflow-hidden"
           >
             {card.icon}
             <span className="mt-2 text-sm font-medium">{card.title}</span>

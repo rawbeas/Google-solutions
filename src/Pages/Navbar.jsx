@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { AiOutlineMenu } from "react-icons/ai";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, Links } from "react-router-dom";
 
 const Navbar = () => {
   const [menu, setMenu] = useState(false);
@@ -30,8 +30,10 @@ const Navbar = () => {
       >
         {/* Logo */}
         <div className="text-xl lg:text-2xl font-bold flex pl-7 items-center gap-1">
-          <span className="text-white">Google</span>
-          <span className="text-purple-500">Solutions</span>
+          <Link to={"/"}>
+            <span className="text-white">Google</span>
+            <span className="text-purple-500">Solutions</span>
+          </Link>
         </div>
 
         {/* Navigation Links */}
