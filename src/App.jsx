@@ -7,11 +7,13 @@ import Coach from "./Pages/Coach";
 import SignUp from "./Pages/SignUp";
 import AboutUs from "./Pages/AboutUs";
 import LogIn from "./Pages/LogIn";
+import Navbar from "./Components/Navbar";
 
 const App = () => {
   return (
     <>
       <Router>
+        <Navbar />
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/athelete" element={<Athelete />} />

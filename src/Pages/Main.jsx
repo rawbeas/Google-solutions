@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../Components/Navbar";
+
 import VideoBackground from "../Components/VideoBackground";
 import AthleteManagementSection from "../Components/AthleteManagementSection";
 import DataStatsSection from "../Components/DataStatsSection";
@@ -8,7 +8,6 @@ import Footer from "../Components/Footer";
 const Main = () => {
   return (
     <div className="min-h-screen">
-      <Navbar />
       <VideoBackground />
       <AthleteManagementSection />
 
