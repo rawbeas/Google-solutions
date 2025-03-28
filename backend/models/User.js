@@ -7,4 +7,6 @@ const userSchema = new mongoose.Schema({
   role: { type: String, required: true, enum: ['Athlete', 'Doctor', 'Coach'] },
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports =
+  mongoose.models.User || mongoose.model('User', userSchema); // Prevent overwriting the model
+
