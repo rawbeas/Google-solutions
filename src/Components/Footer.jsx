@@ -55,7 +55,7 @@ const Footer = () => {
   return (
     <motion.footer
       ref={footerRef}
-      className="mt-40 bg-slate-700 text-white py-16 pt-30"
+      className="mt-40 bg-gray-900 text-white py-16 pt-30 border-t-2"
       initial="hidden"
       animate={controls}
       variants={footerVariants}

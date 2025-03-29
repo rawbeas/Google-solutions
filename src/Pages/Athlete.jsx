@@ -5,7 +5,7 @@ import GoogleCalendar from "../Components/GoogleCalendar";
 
 const Athelete = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen mt-25 ">
       {/* Main Content */}
       <main className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

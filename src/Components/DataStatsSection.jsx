@@ -61,7 +61,7 @@ const DataStatsSection = () => {
   return (
     <motion.div
       ref={sectionRef}
-      className="w-full bg-gradient-to-r from-orange-500 to-red-400 py-16 mt-40"
+      className="w-full bg-[#0F172A] py-16 mt-40"
       initial="hidden"
       animate={controls}
       variants={sectionVariants}
@@ -72,15 +72,24 @@ const DataStatsSection = () => {
         className="container mx-auto px-4 text-center text-white"
         variants={itemVariants}
       >
-        <motion.h2 className="text-4xl font-bold mb-4" variants={itemVariants}>
+        <motion.h2
+          className="text-4xl font-bold mb-4 text-orange-500"
+          variants={itemVariants}
+        >
           Back your decisions with data
         </motion.h2>
 
-        <motion.p className="max-w-3xl mx-auto mb-2" variants={itemVariants}>
+        <motion.p
+          className="max-w-3xl mx-auto mb-2  text-white"
+          variants={itemVariants}
+        >
           Join the ranks of elite football clubs and referee federations all
           over the world.
         </motion.p>
-        <motion.p className="max-w-3xl mx-auto mb-10" variants={itemVariants}>
+        <motion.p
+          className="max-w-3xl mx-auto mb-10 text-white"
+          variants={itemVariants}
+        >
           Monitor your athletes' performance and be part of these stats.
         </motion.p>
 

@@ -5,7 +5,7 @@ import TeamDoctor from "../Components/TeamDoctor";
 
 const Doctor = () => {
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto mt-25 p-4">
       <div className="flex mb-6">
         <div className="bg-gray-600 w-48 h-48 flex items-center justify-center text-white">
           photo

@@ -69,14 +69,14 @@ const TrainingLoadSection = () => {
       willChange="transform, opacity"
     >
       <motion.h2
-        className="text-3xl text-center font-bold text-gray-800 mb-10"
+        className="text-3xl text-center font-bold text-orange-400 mb-10"
         variants={itemVariants}
       >
         Monitor the training load of your athletes
       </motion.h2>
 
       <motion.p
-        className="text-gray-600 text-center mb-10 max-w-4xl mx-auto items-center justify-center"
+        className="text-white text-center mb-10 max-w-4xl mx-auto items-center justify-center"
         variants={itemVariants}
       >
         Use our Performance Management tools to monitor the training load of

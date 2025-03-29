@@ -55,14 +55,14 @@ const AthleteManagementSection = () => {
       {/* Left Content */}
       <motion.div className="md:w-1/2 space-y-6" variants={itemVariants}>
         <motion.h2
-          className="text-4xl font-bold text-gray-800"
+          className="text-4xl font-bold text-orange-400"
           variants={itemVariants}
         >
           What does our Athlete Management System offer?
         </motion.h2>
 
         <motion.p
-          className="text-gray-600 leading-relaxed"
+          className="text-white leading-relaxed"
           variants={itemVariants}
         >
           The Topsportslab platform is an easy-to-use and customisable Athlete
@@ -71,7 +71,7 @@ const AthleteManagementSection = () => {
         </motion.p>
 
         <motion.p
-          className="text-gray-600 leading-relaxed"
+          className="text-white leading-relaxed"
           variants={itemVariants}
         >
           Our system can be used to centralise all health and performance data
