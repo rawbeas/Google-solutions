@@ -4,7 +4,7 @@ import { AiOutlineMenu } from "react-icons/ai";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar2 = () => {
   const [menu, setMenu] = useState(false);
 
   const variants = {
@@ -32,10 +32,10 @@ const Navbar = () => {
         <div className="text-xl lg:text-2xl font-bold flex items-center gap-1">
           <Link
             to={"/"}
-            className="text-white hover:text-orange-500 transition"
+            className="text-white hover:text-purple-400 transition"
           >
             <span>Google</span>
-            <span className="text-orange-500">Solutions</span>
+            <span className="text-purple-400">Solutions</span>
           </Link>
         </div>
 
@@ -44,12 +44,9 @@ const Navbar = () => {
           {items.map(({ id, text, to }) => (
             <li
               key={id}
-              className="hover:text-orange-500 transition cursor-pointer"
+              className="hover:text-purple-400 transition cursor-pointer"
             >
-              <Link
-                to={to}
-                className="text-white hover:text-orange-500 transition cursor-pointer"
-              >
+              <Link to={to} className="text-white">
                 {text}
               </Link>
             </li>
@@ -59,7 +56,7 @@ const Navbar = () => {
         {/* Sign Up Button */}
         <Link
           to="/signup"
-          className="md:text-base lg:text-lg bg-orange-500 hover:text-orange-300 transition px-4 py-2 rounded text-white"
+          className="md:text-base lg:text-lg bg-purple-500 hover:bg-purple-400 transition px-4 py-2 rounded text-white"
         >
           Sign Up
         </Link>
@@ -75,7 +72,7 @@ const Navbar = () => {
           className="text-xl font-bold flex items-center gap-2"
         >
           <span className="text-white">Google</span>
-          <span className="text-orange-500">Solutions</span>
+          <span className="text-purple-400">Solutions</span>
         </motion.div>
 
         {/* Mobile Menu Button */}
@@ -105,7 +102,7 @@ const Navbar = () => {
                   {items.map(({ id, text, to }) => (
                     <li
                       key={id}
-                      className="hover:text-orange-500 transition cursor-pointer"
+                      className="hover:text-purple-400 transition cursor-pointer"
                     >
                       <Link to={to}>{text}</Link>
                     </li>
@@ -113,7 +110,7 @@ const Navbar = () => {
                 </ul>
                 <Link
                   to="/signup"
-                  className="mt-6 text-lg bg-orange-500 hover:text-orange-300 transition px-4 py-2 rounded text-white"
+                  className="mt-6 text-lg bg-purple-500 hover:bg-purple-400 transition px-4 py-2 rounded text-white"
                 >
                   Sign Up
                 </Link>
@@ -126,4 +123,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navbar2;

@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Main from "./Pages/Main";
-import Athelete from "./Pages/Athlete";
+import Athlete from "./Pages/Athlete";
 import Doctor from "./Pages/Doctor";
 import Coach from "./Pages/Coach";
 import SignUp from "./Pages/SignUp";
@@ -16,7 +16,7 @@ const App = () => {
         <Navbar />
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/athlete" element={<Athelete />} />
+          <Route path="/athlete" element={<Athlete />} />
           <Route path="/doctor" element={<Doctor />} />
           <Route path="/coach" element={<Coach />} />
           <Route path="/signup" element={<SignUp />} />

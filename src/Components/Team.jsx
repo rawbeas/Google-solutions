@@ -23,7 +23,7 @@ const Team = () => {
 
   return (
     <div className="mt-4 relative">
-      <h2 className="text-xl font-bold mb-4">Team:</h2>
+      <h2 className="text-xl font-bold text-orange-500 mb-4">Team:</h2>
       <div className="grid grid-cols-1 gap-4">
         {teamCards.map((member) => (
           <div
