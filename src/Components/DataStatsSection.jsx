@@ -1,72 +1,25 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
+import { motion } from "framer-motion";
+import { useScrollAnimation } from "../hooks/useScrollAnimation";
 import {
-  motion,
-  useAnimation,
-  useScroll,
-  useSpring,
-  useReducedMotion,
-} from "framer-motion";
+  containerVariants,
+  itemVariants,
+} from "../constants/animationVariants";
 
 const DataStatsSection = () => {
-  const sectionRef = useRef(null);
-  const controls = useAnimation();
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-  const shouldReduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    const unsubscribe = smoothProgress.onChange((latest) => {
-      if (latest > 0.1) {
-        controls.start("visible");
-      } else {
-        controls.start("hidden");
-      }
-    });
-
-    return () => unsubscribe();
-  }, [controls, smoothProgress]);
-
-  const sectionVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: shouldReduceMotion ? 0 : 0.8,
-        ease: "easeOut",
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: shouldReduceMotion ? 0 : 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
+  const [ref, controls] = useScrollAnimation(0.1);
 
   return (
     <motion.div
-      ref={sectionRef}
-      className="w-full bg-[#0F172A] py-16 mt-40"
+      ref={ref}
+      className="container mx-auto mt-30 px-4 py-16"
       initial="hidden"
       animate={controls}
-      variants={sectionVariants}
-      style={{ scrollMarginTop: "80px" }}
-      willChange="transform, opacity"
+      variants={containerVariants}
+      style={{
+        willChange: "transform",
+        translate: "will-change",
+      }}
     >
       <motion.div
         className="container mx-auto px-4 text-center text-white"

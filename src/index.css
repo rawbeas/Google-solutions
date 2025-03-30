@@ -3,3 +3,18 @@
 html {
   scroll-behavior: smooth;
 }
+body {
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.motion-safe {
+  @media (prefers-reduced-motion: no-preference) {
+    scroll-behavior: smooth;
+  }
+}
+
+* {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
