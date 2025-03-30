@@ -1,74 +1,68 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom"; // Add this import if missing
+import { useScrollAnimation } from "../hooks/useScrollAnimation";
 import {
-  motion,
-  useAnimation,
-  useScroll,
-  useSpring,
-  useReducedMotion,
-} from "framer-motion";
-
-import { Link } from "react-router-dom";
+  containerVariants,
+  itemVariants,
+} from "../constants/animationVariants";
 
 const Footer = () => {
-  const footerRef = useRef(null);
-  const controls = useAnimation();
-  const { scrollYProgress } = useScroll({
-    target: footerRef,
-    offset: ["start end", "end start"],
-  });
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-  const shouldReduceMotion = useReducedMotion();
+  const [ref, controls] = useScrollAnimation(0.1);
 
-  useEffect(() => {
-    const unsubscribe = smoothProgress.onChange((latest) => {
-      if (latest > 0.1) {
-        controls.start("visible");
-        document.body.classList.add("footer-in-view");
-      } else {
-        controls.start("hidden");
-        document.body.classList.remove("footer-in-view");
-      }
-    });
-
-    return () => {
-      unsubscribe();
-      document.body.classList.remove("footer-in-view");
-    };
-  }, [controls, smoothProgress]);
-
-  const footerVariants = {
-    hidden: { opacity: 0, y: 50 },
+  const borderVariants = {
+    hidden: {
+      scaleX: 0,
+      opacity: 0,
+    },
     visible: {
+      scaleX: 1,
       opacity: 1,
-      y: 0,
       transition: {
-        duration: shouldReduceMotion ? 0 : 0.8,
-        ease: "easeOut",
+        duration: 1,
+        ease: "easeInOut",
       },
     },
   };
 
   return (
     <motion.footer
-      ref={footerRef}
-      className="mt-40 bg-gray-900 text-white py-16 pt-30 border-t-2"
+      ref={ref}
+      className="bg-gray-900 mt-30 text-white py-12"
       initial="hidden"
       animate={controls}
-      variants={footerVariants}
-      style={{ scrollMarginTop: "80px" }}
-      willChange="transform, opacity"
+      variants={containerVariants}
+      style={{
+        willChange: "transform",
+        translate: "will-change",
+      }}
     >
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center ">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-40 text-center">
+      <motion.div
+        className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 via-orange-400 to-orange-500"
+        variants={borderVariants}
+        style={{
+          originX: 0,
+          transformOrigin: "left",
+        }}
+      />
+      <div className="container  mx-auto px-4">
+        <motion.div
+          className="flex flex-col items-center"
+          variants={itemVariants}
+        >
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-40 text-center"
+            variants={itemVariants}
+          >
             {/* Topsportslab Column */}
-            <div>
-              <h3 className="font-bold text-lg  mb-6">Dashboard</h3>
-              <ul className="space-y-4">
+            <motion.div variants={itemVariants}>
+              <motion.h3
+                className="font-bold text-lg mb-6"
+                variants={itemVariants}
+              >
+                Dashboard
+              </motion.h3>
+              <motion.ul className="space-y-4" variants={itemVariants}>
                 <li>
                   <a href="#" className="text-orange-400 hover:underline">
                     Athlete Management System
@@ -84,13 +78,18 @@ const Footer = () => {
                     Coach Management System
                   </a>
                 </li>
-              </ul>
-            </div>
+              </motion.ul>
+            </motion.div>
 
             {/* Legal Column */}
-            <div>
-              <h3 className="font-bold text-lg mb-6">Legal</h3>
-              <ul className="space-y-4">
+            <motion.div variants={itemVariants}>
+              <motion.h3
+                className="font-bold text-lg mb-6"
+                variants={itemVariants}
+              >
+                Legal
+              </motion.h3>
+              <motion.ul className="space-y-4" variants={itemVariants}>
                 <li>
                   <a href="#" className="hover:text-orange-400">
                     Conditions of use
@@ -106,24 +105,38 @@ const Footer = () => {
                     Privacy Statement
                   </a>
                 </li>
-              </ul>
-            </div>
+              </motion.ul>
+            </motion.div>
 
             {/* Contact Column */}
-            <div>
-              <h3 className="font-bold text-lg mb-6">Contact</h3>
-              <p className="mb-2">We'd love to hear from you!</p>
-              <p className="mb-6">Questions or suggestions?</p>
-              <Link to="/aboutus">
-                <button className="bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-6 rounded transition duration-300">
-                  About us
-                </button>
-              </Link>
-            </div>
-          </div>
+            <motion.div variants={itemVariants}>
+              <motion.h3
+                className="font-bold text-lg mb-6"
+                variants={itemVariants}
+              >
+                Contact
+              </motion.h3>
+              <motion.p className="mb-2" variants={itemVariants}>
+                We'd love to hear from you!
+              </motion.p>
+              <motion.p className="mb-6" variants={itemVariants}>
+                Questions or suggestions?
+              </motion.p>
+              <motion.div variants={itemVariants}>
+                <Link to="/aboutus">
+                  <button className="bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-6 rounded transition duration-300">
+                    About us
+                  </button>
+                </Link>
+              </motion.div>
+            </motion.div>
+          </motion.div>
 
-          <div className="mt-16 pt-8 border-t border-slate-600 flex flex-col items-center">
-            <div className="mb-4">
+          <motion.div
+            className="mt-16 pt-8 border-t border-slate-600 flex flex-col items-center"
+            variants={itemVariants}
+          >
+            <motion.div className="mb-4" variants={itemVariants}>
               <svg
                 viewBox="0 0 24 24"
                 className="h-8 w-8 text-white"
@@ -132,12 +145,12 @@ const Footer = () => {
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
                 <path d="M15 6.5l-3 7.5-3-7.5z" />
               </svg>
-            </div>
-            <p className="text-sm text-center">
+            </motion.div>
+            <motion.p className="text-sm text-center" variants={itemVariants}>
               All rights reserved - Google Solutions
-            </p>
-          </div>
-        </div>
+            </motion.p>
+          </motion.div>
+        </motion.div>
       </div>
     </motion.footer>
   );

@@ -1,62 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { motion } from "framer-motion";
+import { useScrollAnimation } from "../hooks/useScrollAnimation";
 import {
-  motion,
-  useAnimation,
-  useScroll,
-  useSpring,
-  useReducedMotion,
-} from "framer-motion";
+  containerVariants,
+  itemVariants,
+} from "../constants/animationVariants";
 
 const TrainingLoadSection = () => {
-  const controls = useAnimation();
-  const ref = React.useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-  const shouldReduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    const unsubscribe = smoothProgress.onChange((latest) => {
-      if (latest > 0.1) {
-        controls.start("visible");
-      } else {
-        controls.start("hidden");
-      }
-    });
-
-    return () => unsubscribe();
-  }, [controls, smoothProgress]);
-
-  const containerVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: shouldReduceMotion ? 0 : 0.8,
-        ease: "easeOut",
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: shouldReduceMotion ? 0 : 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
+  const [ref, controls] = useScrollAnimation(0.1);
 
   return (
     <motion.div
@@ -65,8 +16,10 @@ const TrainingLoadSection = () => {
       initial="hidden"
       animate={controls}
       variants={containerVariants}
-      style={{ scrollMarginTop: "80px" }}
-      willChange="transform, opacity"
+      style={{
+        willChange: "transform",
+        translate: "will-change",
+      }}
     >
       <motion.h2
         className="text-3xl text-center font-bold text-orange-400 mb-10"

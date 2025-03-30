@@ -1,48 +1,14 @@
-import React, { useEffect, useRef } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useScrollAnimation } from "../hooks/useScrollAnimation";
+import {
+  containerVariants,
+  itemVariants,
+} from "../constants/animationVariants";
 
 const AthleteManagementSection = () => {
-  const controls = useAnimation();
-  const ref = useRef(null);
-  const inView = useInView(ref, {
-    amount: 0.1,
-    threshold: 0,
-    triggerOnce: true,
-  });
-
-  useEffect(() => {
-    if (inView) {
-      controls.start("visible");
-    } else {
-      controls.start("hidden");
-    }
-  }, [controls, inView]);
-
-  const containerVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
+  const [ref, controls] = useScrollAnimation(0.1);
 
   return (
     <motion.div
@@ -51,6 +17,10 @@ const AthleteManagementSection = () => {
       initial="hidden"
       animate={controls}
       variants={containerVariants}
+      style={{
+        willChange: "transform",
+        translate: "will-change",
+      }}
     >
       {/* Left Content */}
       <motion.div className="md:w-1/2 space-y-6" variants={itemVariants}>
