@@ -1,39 +1,44 @@
+require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
 const connectDB = require('./config/db');
-const UserModel = require('./models/User'); // Import User model
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/userRoutes'); // Add user routes
+const athleteRoutes = require('./routes/athlete');
+const googleFitRoutes = require('./routes/googleFit');
 
-dotenv.config(); // Load environment variables
-connectDB(); // Connect to MongoDB
+// Connect to MongoDB
+connectDB()
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.error('MongoDB Connection Error:', err));
 
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
 app.use(bodyParser.json());
 
 // Routes
-app.post('/api/users/signup', async (req, res) => {
-  const { name, email, password, role } = req.body;
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes); // Add user routes
+app.use('/api/athletes', athleteRoutes);
+app.use('/api/google-fit', googleFitRoutes);
 
-  try {
-    const existingUser = await UserModel.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Email already exists' });
-    }
-
-    const newUser = new UserModel({ name, email, password, role });
-    await newUser.save();
-
-    res.status(201).json({ message: `${role} signed up successfully`, user: newUser });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  }
+// Error handling
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal Server Error' });
 });
 
-// Start Server
+console.log('Google Client ID:', process.env.GOOGLE_CLIENT_ID);
+
+// Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

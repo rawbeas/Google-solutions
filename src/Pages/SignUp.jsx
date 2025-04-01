@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // For navigation after signup
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,8 @@ const SignUp = () => {
     role: 'Athlete',
   });
 
+  const navigate = useNavigate(); // Hook for navigation
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -17,7 +20,14 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/api/users/signup', formData);
+
+      // Save JWT token to localStorage
+      localStorage.setItem('token', response.data.token);
+
       alert(response.data.message);
+
+      // Redirect to another page (e.g., dashboard or login)
+      navigate('/Athlete'); // Change '/dashboard' to your desired route
     } catch (error) {
       console.error('Error:', error.response?.data || error.message);
       alert('Failed to sign up. Please check your input or server.');
@@ -81,4 +91,5 @@ const SignUp = () => {
 };
 
 export default SignUp;
+
 
