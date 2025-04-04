@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import PredictionCard from "../Components/PredictionCard";
 import WeightChart from "../Components/WeightChart";
 import GoogleFitConnect from "../Components/GoogleFitConnect";
@@ -13,24 +13,23 @@ const Athlete = () => {
   const [loading, setLoading] = useState(true);
   const [isMockData, setIsMockData] = useState(false);
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate(); // Replaces useHistory()
 
   const fetchData = async (forceRefresh = false) => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        history.push("/login");
-        return;
-      }
-
-      // Fetch user data with cache busting
-      const userRes = await axios.get("http://localhost:5000/api/users/me", {
+      console.log("token")
+      const userRes = await axios.get("http://localhost:5000/api/users/profile", {
         headers: { Authorization: `Bearer ${token}` },
-        params: { _: Date.now() } // Bypass browser cache
+        params: { _: Date.now() } // Cache Bypass
       });
+      console.log("request")
+      console.log(userRes.data)
       setUser(userRes.data);
-
-      if (userRes.data.fitConnected) {
+      console.log("user")
+      console.log("user is connected",userRes.data.fitConnected)
+      if (userRes) {
+        console.log("Request to get data")
         const [weightsRes, predictionsRes] = await Promise.all([
           axios.get("http://localhost:5000/api/google-fit/sync-weights", {
             headers: { Authorization: `Bearer ${token}` },
@@ -40,16 +39,18 @@ const Athlete = () => {
             headers: { Authorization: `Bearer ${token}` }
           })
         ]);
+        console.log("predicted weights")
 
         setWeights(weightsRes.data.data || []);
         setPredictions(predictionsRes.data || {});
         setIsMockData(weightsRes.data.isMock || false);
+        console.log("weights set")
       }
     } catch (error) {
       console.error("Data fetch error:", error);
       if (error.response?.status === 401) {
         localStorage.removeItem("token");
-        history.push("/login");
+        navigate("/login"); // Redirects to login on unauthorized error
       }
     } finally {
       setLoading(false);
@@ -60,9 +61,8 @@ const Athlete = () => {
     const params = new URLSearchParams(location.search);
     
     if (params.get('fit_connected')) {
-      // Force immediate refresh after connection
-      fetchData(true);
-      history.replace(location.pathname); // Clear URL params
+      fetchData(true); // Force refresh after connection
+      navigate(location.pathname, { replace: true }); // Clears URL params
     } else {
       fetchData();
     }
@@ -88,7 +88,7 @@ const Athlete = () => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {!user?.fitConnected ? (
+        {!user ? (
           <div className="bg-white p-6 rounded-lg shadow-md animate-fade-in">
             <h2 className="text-xl font-semibold mb-4">Connect Google Fit</h2>
             <GoogleFitConnect />
@@ -119,19 +119,19 @@ const Athlete = () => {
               <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
                 <PredictionCard
                   title="Weight Prediction"
-                  value={predictions?.weightPrediction?.toFixed(1) || '--'}
+                  value={0}
                   unit="kg"
                   description="Next week's predicted weight"
                 />
                 <PredictionCard
                   title="Health Score"
-                  value={predictions?.healthScore?.toFixed(1) || '--'}
+                  value={12}
                   unit="/100"
                   description="Overall health assessment"
                 />
                 <PredictionCard
                   title="Experience Level"
-                  value={predictions?.experienceLevel?.toFixed(1) || '--'}
+                  value={334}
                   unit="years"
                   description="Predicted athletic experience"
                 />

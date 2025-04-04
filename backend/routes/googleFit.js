@@ -28,6 +28,7 @@ router.get('/connect', auth, (req, res) => {
       state: req.user.id.toString(),
       prompt: 'consent'
     });
+    console.log("working")
     console.log(`Auth URL generated for user: ${req.user.id}`);
     res.json({ url });
   } catch (error) {
@@ -87,6 +88,7 @@ const createMockData = (userId) => [{
 // Enhanced sync endpoint with mock data support
 router.get('/sync-weights', auth, async (req, res) => {
   try {
+    console.log("request to sync")
     const token = await GoogleFitToken.findOne({ userId: req.user.id });
     
     if (!token) {
@@ -104,6 +106,7 @@ router.get('/sync-weights', auth, async (req, res) => {
     });
 
     // Token refresh logic
+    console.log("request2 to sync")
     if (token.expiryDate < Date.now() + 300000) {
       try {
         const { credentials } = await oauth2Client.refreshAccessToken();
@@ -125,16 +128,21 @@ router.get('/sync-weights', auth, async (req, res) => {
       }
     }
 
-    // Attempt real data fetch
+    // Attempt real data 
+    console.log("request3 to sync")
     try {
-      const fitness = google.fitness('v1');
+      const fitness = google.fitness({
+        version: "v1",
+        auth: oauth2Client,
+      });
       const now = Date.now();
+      console.log("request4 to sync")
       const response = await fitness.users.dataSources.datasets.get({
         userId: 'me',
         dataSourceId: 'derived:com.google.weight:com.google.android.gms:merge_weight',
         datasetId: `${now - 2592000000}000000-${now}000000` // 30 days
       });
-
+      console.log("request5 to sync")
       const weights = response.data.point
         ?.filter(p => p.value?.[0]?.fpVal)
         ?.map(p => ({
@@ -143,7 +151,7 @@ router.get('/sync-weights', auth, async (req, res) => {
           date: new Date(parseInt(p.startTimeNanos) / 1000000),
           source: 'google_fit'
         })) || createMockData(req.user.id);
-
+        console.log("request6 to sync")
       console.log(`Synced ${weights.length} weight entries`);
       await Weight.insertMany(weights, { ordered: false });
       

@@ -6,20 +6,30 @@ const fetchPredictions = require('../utils/fetchPredictions');
 const auth = require('../middlewares/auth');
 
 router.get('/:id/predictions', auth, async (req, res) => {
+  console.log("check2")
   try {
+    console.log("check21")
+    console.log("Returning dummy prediction data...");
     const weights = await Weight.find({ userId: req.params.id })
-      .sort({ date: -1 })
-      .limit(30);
+      
 
-    const predictions = await fetchPredictions(req.params.id, weights);
-    
-    const predictionDoc = new Prediction({
-      userId: req.params.id,
-      ...predictions
-    });
-
-    await predictionDoc.save();
-    res.json(predictionDoc);
+    // const predictions = await fetchPredictions(req.params.id, weights);
+    // console.log("check3")
+    // const predictionDoc = new Prediction({
+    //   userId: req.params.id,
+    //   ...predictions
+    // });
+    // console.log("check4")
+    // await predictionDoc.save();
+    console.log("check3")
+    res.json({
+      "userId": "123abc456",
+      "weightPrediction": 72.3,
+      "healthScore": 85.7,
+      "experienceLevel": 2.5,
+      "createdAt": "2025-04-04T12:34:56.789Z"
+    }
+    );
   } catch (error) {
     res.status(500).json({ error: 'Prediction failed' });
   }

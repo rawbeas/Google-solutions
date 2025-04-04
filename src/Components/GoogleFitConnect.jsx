@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 
 const GoogleFitConnect = () => {
   const navigate = useNavigate();
-
+  const token = localStorage.getItem("token");
   const handleConnect = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/google-fit/connect');
+      const { data } = await axios.get('http://localhost:5000/api/google-fit/connect',{
+        headers: { Authorization: `Bearer ${token}` },
+      });
       
       // Open auth window
       const authWindow = window.open(data.url, '_blank', 'width=500,height=600');
