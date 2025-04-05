@@ -8,6 +8,8 @@ import SignUp from "./Pages/SignUp";
 import AboutUs from "./Pages/AboutUs";
 import LogIn from "./Pages/LogIn";
 import Navbar from "./Pages/Navbar";
+import Career from "./Pages/Career";
+import Financial from "./Pages/Financial";
 
 const App = () => {
   return (
@@ -22,6 +24,8 @@ const App = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/login" element={<LogIn />} />
+          <Route path="/career" element={<Career />} />
+          <Route path="/financial" element={<Financial />} />
         </Routes>
       </Router>
     </>
