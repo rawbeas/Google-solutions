@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { AiOutlineMenu } from "react-icons/ai";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ userRole }) => {
   const [menu, setMenu] = useState(false);
 
   const variants = {
@@ -12,12 +12,50 @@ const Navbar = () => {
     closed: { opacity: 0, x: "100%" },
   };
 
-  const items = [
-    { id: 1, text: "Home", to: "/" },
-    { id: 2, text: "Services", to: "/services" },
-    { id: 3, text: "Work", to: "/work" },
-    { id: 4, text: "About Us", to: "/aboutus" },
-  ];
+  // Memoize navigation items based on user role
+  const items = useMemo(() => {
+    switch (userRole) {
+      case "athlete":
+        return [
+          { id: 1, text: "Dashboard", to: "/athlete" },
+          { id: 2, text: "Training", to: "/athlete/training" },
+          { id: 3, text: "Schedule", to: "/athlete/schedule" },
+          { id: 4, text: "Progress", to: "/athlete/progress" },
+        ];
+      case "doctor":
+        return [
+          { id: 1, text: "Dashboard", to: "/doctor" },
+          { id: 2, text: "Patients", to: "/doctor/patients" },
+          { id: 3, text: "Appointments", to: "/doctor/appointments" },
+          { id: 4, text: "Reports", to: "/doctor/reports" },
+        ];
+      case "coach":
+        return [
+          { id: 1, text: "Dashboard", to: "/coach" },
+          { id: 2, text: "Athletes", to: "/coach/athletes" },
+          { id: 3, text: "Training Plans", to: "/coach/plans" },
+          { id: 4, text: "Performance", to: "/coach/performance" },
+        ];
+      default:
+        return [
+          { id: 1, text: "Home", to: "/" },
+          { id: 2, text: "Services", to: "/services" },
+          { id: 3, text: "Work", to: "/work" },
+          { id: 4, text: "About Us", to: "/aboutus" },
+        ];
+    }
+  }, [userRole]);
+
+  // Memoized logo text
+  const logo = useMemo(() => {
+    const logos = {
+      athlete: "Athlete Portal",
+      doctor: "Doctor Portal",
+      coach: "Coach Portal",
+      default: "GoogleSolutions",
+    };
+    return logos[userRole] || logos.default;
+  }, [userRole]);
 
   return (
     <header className="bg-transparent absolute w-full top-0 left-0 z-50">
@@ -28,14 +66,13 @@ const Navbar = () => {
         transition={{ duration: 0.5 }}
         className="container mx-auto hidden md:flex justify-between items-center py-5 px-7 backdrop-blur-lg bg-black/30 border-b border-gray-700 rounded-b-lg"
       >
-        {/* Logo */}
+        {/* Dynamic Logo */}
         <div className="text-xl lg:text-2xl font-bold flex items-center gap-1">
           <Link
-            to={"/"}
+            to={userRole ? `/${userRole}` : "/"}
             className="text-white hover:text-orange-500 transition"
           >
-            <span>Google</span>
-            <span className="text-orange-500">Solutions</span>
+            <span className="text-orange-500">{logo}</span>
           </Link>
         </div>
 
@@ -56,13 +93,32 @@ const Navbar = () => {
           ))}
         </ul>
 
-        {/* Sign Up Button */}
-        <Link
-          to="/signup"
-          className="md:text-base lg:text-lg bg-orange-500 hover:text-orange-300 transition px-4 py-2 rounded text-white"
-        >
-          Sign Up
-        </Link>
+        {/* Dynamic Auth Section */}
+        {userRole ? (
+          <div className="flex items-center gap-4">
+            <Link
+              to={`/${userRole}/profile`}
+              className="text-white hover:text-orange-500 transition"
+            >
+              Profile
+            </Link>
+            <button
+              onClick={() => {
+                /* Add logout handler */
+              }}
+              className="md:text-base lg:text-lg bg-orange-500 hover:text-orange-300 transition px-4 py-2 rounded text-white"
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          <Link
+            to="/signup"
+            className="md:text-base lg:text-lg bg-orange-500 hover:text-orange-300 transition px-4 py-2 rounded text-white"
+          >
+            Sign Up
+          </Link>
+        )}
       </motion.div>
 
       {/* Mobile Navbar */}
@@ -74,8 +130,7 @@ const Navbar = () => {
           transition={{ duration: 0.5 }}
           className="text-xl font-bold flex items-center gap-2"
         >
-          <span className="text-white">Google</span>
-          <span className="text-orange-500">Solutions</span>
+          <span className="text-orange-500">{logo}</span>
         </motion.div>
 
         {/* Mobile Menu Button */}
@@ -111,12 +166,31 @@ const Navbar = () => {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  to="/signup"
-                  className="mt-6 text-lg bg-orange-500 hover:text-orange-300 transition px-4 py-2 rounded text-white"
-                >
-                  Sign Up
-                </Link>
+                {userRole ? (
+                  <div className="flex flex-col items-center gap-4">
+                    <Link
+                      to={`/${userRole}/profile`}
+                      className="text-white hover:text-orange-500 transition"
+                    >
+                      Profile
+                    </Link>
+                    <button
+                      onClick={() => {
+                        /* Add logout handler */
+                      }}
+                      className="text-lg bg-orange-500 hover:text-orange-300 transition px-4 py-2 rounded text-white"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <Link
+                    to="/signup"
+                    className="mt-6 text-lg bg-orange-500 hover:text-orange-300 transition px-4 py-2 rounded text-white"
+                  >
+                    Sign Up
+                  </Link>
+                )}
               </div>
             )}
           </motion.div>
