@@ -20,6 +20,7 @@ const SCOPES = [
 ];
 
 // Generate Google Fit auth URL
+
 router.get('/connect', auth, (req, res) => {
   try {
     console.log("request got")

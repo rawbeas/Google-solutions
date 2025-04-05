@@ -14,7 +14,18 @@ const Athlete = () => {
   const [isMockData, setIsMockData] = useState(false);
   const location = useLocation();
   const navigate = useNavigate(); // Replaces useHistory()
-
+  const [googleFit, setGoogleFit] = useState(false);
+  const getItemWithExpiry = (key) => {
+    const itemStr = localStorage.getItem(key);
+    if (!itemStr) return null;
+    const item = JSON.parse(itemStr);
+    if (new Date().getTime() > item.expiry) {
+      localStorage.removeItem(key);
+      return null;
+    }
+    return item.value;
+  };
+  
   const fetchData = async (forceRefresh = false) => {
     try {
       const token = localStorage.getItem("token");
@@ -60,6 +71,12 @@ const Athlete = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     
+    // Check if googlefit is stored
+  const fitStatus = getItemWithExpiry('googlefit');
+  
+  if (fitStatus) {
+    setGoogleFit(true);
+  }
     if (params.get('fit_connected')) {
       fetchData(true); // Force refresh after connection
       navigate(location.pathname, { replace: true }); // Clears URL params
@@ -88,7 +105,12 @@ const Athlete = () => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {!user ? (
+        {/* add condition to check if google sign too */}
+        {googleFit && (
+  <p className="text-green-600 mb-4">Google Fit is connected!</p>
+)}
+{/* check if both user and google fit is there , then only show graphs */}
+        {user&&!googleFit ? (
           <div className="bg-white p-6 rounded-lg shadow-md animate-fade-in">
             <h2 className="text-xl font-semibold mb-4">Connect Google Fit</h2>
             <GoogleFitConnect />
