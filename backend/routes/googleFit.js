@@ -22,6 +22,7 @@ const SCOPES = [
 // Generate Google Fit auth URL
 router.get('/connect', auth, (req, res) => {
   try {
+    console.log("request got")
     const url = oauth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: SCOPES,
@@ -44,7 +45,7 @@ router.get('/connect', auth, (req, res) => {
 router.get('/callback', async (req, res) => {
   try {
     const { code, state } = req.query;
-    
+ console.log("callbakc")
     if (!code || !state) {
       console.error('Missing OAuth parameters');
       return res.redirect('/athlete?error=invalid_params');
@@ -52,7 +53,8 @@ router.get('/callback', async (req, res) => {
 
     const { tokens } = await oauth2Client.getToken(code);
     console.log(`Tokens received for user: ${state}`);
-
+    console.log("callbakc")
+    console.log("callbakc")
     // Update user connection status
     await User.findByIdAndUpdate(state, { fitConnected: true }, { new: true });
     

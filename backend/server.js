@@ -35,7 +35,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
-console.log('Google Client ID:', process.env.GOOGLE_CLIENT_ID);
+// console.log('Google Client ID:', process.env.GOOGLE_CLIENT_ID);
 
 // Start server
 const PORT = process.env.PORT || 5000;
