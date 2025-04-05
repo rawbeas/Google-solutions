@@ -4,9 +4,14 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, required: true, enum: ['Athlete', 'Doctor', 'Coach'] },
+  role: { type: String, enum: ['Athlete', 'Coach', 'Doctor'], required: true },
+  fit_connected: { type: Boolean, default: false },
+  googleFitTokens: {
+    access_token: String,
+    refresh_token: String,
+    expiry_date: Number
+  }
 });
 
-module.exports =
-  mongoose.models.User || mongoose.model('User', userSchema); // Prevent overwriting the model
+module.exports = mongoose.model('User', userSchema);
 
