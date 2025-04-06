@@ -2,18 +2,16 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
-import {
-  containerVariants,
-  itemVariants,
-} from "../constants/animationVariants";
+import { containerVariants, itemVariants } from "../constants/animation";
 
 const AthleteManagementSection = () => {
   const [ref, controls] = useScrollAnimation(0.1);
 
   return (
     <motion.div
+      id="services"
       ref={ref}
-      className="container mx-auto px-4 py-16 flex flex-col md:flex-row items-center justify-between gap-8"
+      className="container mx-auto px-4 py-16 flex flex-col md:flex-row items-center justify-between gap-8 scroll-mt-20"
       initial="hidden"
       animate={controls}
       variants={containerVariants}

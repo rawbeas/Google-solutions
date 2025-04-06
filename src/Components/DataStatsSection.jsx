@@ -1,10 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
-import {
-  containerVariants,
-  itemVariants,
-} from "../constants/animationVariants";
+import { containerVariants, itemVariants } from "../constants/animation";
 
 const DataStatsSection = () => {
   const [ref, controls] = useScrollAnimation(0.1);
