@@ -71,7 +71,8 @@ router.get('/callback', async (req, res) => {
     );
 
     console.log(`Google Fit connected for user: ${state}`);
-    res.redirect(`http://localhost:5173/athlete?fit_connected=true&ts=${Date.now()}`);
+    // frontend
+    res.redirect(`${process.env.FRONTEND_URL}/athlete?fit_connected=true&ts=${Date.now()}`);
     
   } catch (error) {
     console.error('[Google Fit] Connection Error:', error.message);
