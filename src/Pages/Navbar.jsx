@@ -2,12 +2,30 @@ import React, { useState, useMemo } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { AiOutlineMenu } from "react-icons/ai";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link,Navigate } from "react-router-dom";
 import { scrollToSection } from "../constants/scrollAnimation";
-
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 const Navbar = ({ userRole }) => {
   const [menu, setMenu] = useState(false);
-
+const [user,setuser]=useState();
+const location = useLocation(); // current path info
+useEffect(()=>{
+  const token = localStorage.getItem("token");
+  const token2 = localStorage.getItem("googlefit");
+    if (token) {
+      try {
+        // Optionally decode or fetch user role from token
+      
+        setuser(token);
+      } catch (err) {
+        console.error("Invalid token format", err);
+        setuser(null);
+      }
+    } else {
+      setuser(null);
+    }
+},[location.pathname]);
   const variants = {
     open: { opacity: 1, x: 0 },
     closed: { opacity: 0, x: "100%" },
@@ -19,7 +37,12 @@ const Navbar = ({ userRole }) => {
     }
   };
 
-  // Memoize navigation items based on user role
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("googlefit");
+    window.location.reload();
+  };
+
   const items = useMemo(() => {
     switch (userRole) {
       case "athlete":
@@ -47,13 +70,11 @@ const Navbar = ({ userRole }) => {
         return [
           { id: 1, text: "Home", to: "/" },
           { id: 2, text: "Services", to: "/services", scroll: true },
-          // { id: 3, text: "Work", to: "/work" },
           { id: 3, text: "About Us", to: "/aboutus" },
         ];
     }
   }, [userRole]);
 
-  // Memoized logo text
   const logo = useMemo(() => {
     const logos = {
       athlete: "Athlete Portal",
@@ -73,35 +94,26 @@ const Navbar = ({ userRole }) => {
         transition={{ duration: 0.5 }}
         className="container mx-auto hidden md:flex justify-between items-center py-5 px-7 backdrop-blur-lg bg-black/30 border-b border-gray-700 rounded-b-lg"
       >
-        {/* Dynamic Logo */}
+        {/* Logo */}
         <div className="text-xl lg:text-2xl font-bold flex-1">
-          <Link
-            to={userRole ? `/${userRole}` : "/"}
-            className="text-white hover:text-orange-500 transition"
-          >
+          <Link to={userRole ? `/${userRole}` : "/"} className="text-white hover:text-orange-500 transition">
             <span className="text-orange-500">{logo}</span>
           </Link>
         </div>
 
-        {/* Navigation Links - Centered */}
-        <ul className="hidden md:flex items-center justify-center space-x-6 list-none lg:text-base flex-1">
+        {/* Nav Links */}
+        <ul className="md:flex items-center justify-center space-x-6 list-none lg:text-base flex-1">
           {items.map(({ id, text, to, scroll }) => (
-            <li
-              key={id}
-              className="hover:text-orange-500 transition cursor-pointer"
-            >
+            <li key={id} className="hover:text-orange-500 transition cursor-pointer">
               {scroll ? (
                 <button
                   onClick={() => handleNavigation(to, scroll)}
-                  className="text-white hover:text-orange-500 transition cursor-pointer"
+                  className="text-white hover:text-orange-500 transition"
                 >
                   {text}
                 </button>
               ) : (
-                <Link
-                  to={to}
-                  className="text-white hover:text-orange-500 transition cursor-pointer"
-                >
+                <Link to={to} className="text-white hover:text-orange-500 transition">
                   {text}
                 </Link>
               )}
@@ -109,23 +121,18 @@ const Navbar = ({ userRole }) => {
           ))}
         </ul>
 
-        {/* Dynamic Auth Section */}
+        {/* Auth Section */}
         <div className="flex-1 flex justify-end">
-          {userRole ? (
+          {user ? (
             <div className="flex items-center gap-4">
-              <Link
-                to={`/${userRole}/profile`}
-                className="text-white hover:text-orange-500 transition"
-              >
+              <Link to={`/${userRole}/profile`} className="text-white hover:text-orange-500 transition">
                 Profile
               </Link>
               <button
-                onClick={() => {
-                  /* Add logout handler */
-                }}
+                onClick={handleLogout}
                 className="md:text-base lg:text-lg bg-orange-500 hover:text-orange-300 transition px-4 py-2 rounded text-white"
               >
-                Logout
+                Sign Out
               </button>
             </div>
           ) : (
@@ -141,7 +148,6 @@ const Navbar = ({ userRole }) => {
 
       {/* Mobile Navbar */}
       <div className="flex md:hidden justify-between px-5 py-4 backdrop-blur-lg bg-black/30 border-b border-gray-700 rounded-b-lg">
-        {/* Mobile Logo */}
         <motion.div
           initial={{ opacity: 0, x: 100, y: -100 }}
           animate={{ opacity: 1, x: 0, y: 0 }}
@@ -151,12 +157,10 @@ const Navbar = ({ userRole }) => {
           <span className="text-orange-500">{logo}</span>
         </motion.div>
 
-        {/* Mobile Menu Button */}
         <button onClick={() => setMenu((prev) => !prev)} className="text-white">
           {menu ? <IoCloseSharp size={30} /> : <AiOutlineMenu size={30} />}
         </button>
 
-        {/* Mobile Menu */}
         <motion.div
           animate={menu ? "open" : "closed"}
           className="fixed inset-0 bg-black bg-opacity-50 z-50"
@@ -168,7 +172,7 @@ const Navbar = ({ userRole }) => {
           >
             <div className="px-7 py-6 flex justify-between items-center">
               <span className="text-lg font-semibold">Menu</span>
-              <button onClick={() => setMenu((prev) => !prev)}>
+              <button onClick={() => setMenu(false)}>
                 <IoCloseSharp size={30} className="text-white" />
               </button>
             </div>
@@ -176,37 +180,36 @@ const Navbar = ({ userRole }) => {
               <div className="flex flex-col justify-center items-center space-y-6 mt-10">
                 <ul className="text-white text-lg space-y-6">
                   {items.map(({ id, text, to, scroll }) => (
-                    <li
-                      key={id}
-                      className="hover:text-orange-500 transition cursor-pointer"
-                    >
+                    <li key={id} className="hover:text-orange-500 transition cursor-pointer">
                       {scroll ? (
                         <button
                           onClick={() => {
                             handleNavigation(to, scroll);
                             setMenu(false);
                           }}
-                          className="text-white hover:text-orange-500 transition cursor-pointer"
+                          className="text-white hover:text-orange-500 transition"
                         >
                           {text}
                         </button>
                       ) : (
-                        <Link to={to}>{text}</Link>
+                        <Link to={to} onClick={() => setMenu(false)}>{text}</Link>
                       )}
                     </li>
                   ))}
                 </ul>
-                {userRole ? (
+                {user ? (
                   <div className="flex flex-col items-center gap-4">
                     <Link
                       to={`/${userRole}/profile`}
+                      onClick={() => setMenu(false)}
                       className="text-white hover:text-orange-500 transition"
                     >
                       Profile
                     </Link>
                     <button
                       onClick={() => {
-                        /* Add logout handler */
+                        handleLogout();
+                        setMenu(false);
                       }}
                       className="text-lg bg-orange-500 hover:text-orange-300 transition px-4 py-2 rounded text-white"
                     >
@@ -216,6 +219,7 @@ const Navbar = ({ userRole }) => {
                 ) : (
                   <Link
                     to="/signup"
+                    onClick={() => setMenu(false)}
                     className="mt-6 text-lg bg-orange-500 hover:text-orange-300 transition px-4 py-2 rounded text-white"
                   >
                     Sign Up
