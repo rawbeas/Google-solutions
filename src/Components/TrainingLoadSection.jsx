@@ -42,7 +42,7 @@ const TrainingLoadSection = () => {
         variants={itemVariants}
       >
         <motion.img
-          src="./Athleteimg.png"
+          src="./AthleteImg.png"
           alt="Training Load Management"
           className="w-full  h-full object-cover rounded-lg shadow-xl"
           whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
