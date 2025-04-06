@@ -3,6 +3,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import { AiOutlineMenu } from "react-icons/ai";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { scrollToSection } from "../utils/scrollUtils";
 
 const Navbar = ({ userRole }) => {
   const [menu, setMenu] = useState(false);
@@ -10,6 +11,12 @@ const Navbar = ({ userRole }) => {
   const variants = {
     open: { opacity: 1, x: 0 },
     closed: { opacity: 0, x: "100%" },
+  };
+
+  const handleNavigation = (to, scroll) => {
+    if (scroll && to === "/services") {
+      scrollToSection("services");
+    }
   };
 
   // Memoize navigation items based on user role
@@ -39,7 +46,7 @@ const Navbar = ({ userRole }) => {
       default:
         return [
           { id: 1, text: "Home", to: "/" },
-          { id: 2, text: "Services", to: "/services" },
+          { id: 2, text: "Services", to: "/services", scroll: true },
           { id: 3, text: "Work", to: "/work" },
           { id: 4, text: "About Us", to: "/aboutus" },
         ];
@@ -78,17 +85,26 @@ const Navbar = ({ userRole }) => {
 
         {/* Navigation Links */}
         <ul className="hidden md:flex items-center space-x-6 list-none lg:text-base">
-          {items.map(({ id, text, to }) => (
+          {items.map(({ id, text, to, scroll }) => (
             <li
               key={id}
               className="hover:text-orange-500 transition cursor-pointer"
             >
-              <Link
-                to={to}
-                className="text-white hover:text-orange-500 transition cursor-pointer"
-              >
-                {text}
-              </Link>
+              {scroll ? (
+                <button
+                  onClick={() => handleNavigation(to, scroll)}
+                  className="text-white hover:text-orange-500 transition cursor-pointer"
+                >
+                  {text}
+                </button>
+              ) : (
+                <Link
+                  to={to}
+                  className="text-white hover:text-orange-500 transition cursor-pointer"
+                >
+                  {text}
+                </Link>
+              )}
             </li>
           ))}
         </ul>
@@ -157,12 +173,24 @@ const Navbar = ({ userRole }) => {
             {menu && (
               <div className="flex flex-col justify-center items-center space-y-6 mt-10">
                 <ul className="text-white text-lg space-y-6">
-                  {items.map(({ id, text, to }) => (
+                  {items.map(({ id, text, to, scroll }) => (
                     <li
                       key={id}
                       className="hover:text-orange-500 transition cursor-pointer"
                     >
-                      <Link to={to}>{text}</Link>
+                      {scroll ? (
+                        <button
+                          onClick={() => {
+                            handleNavigation(to, scroll);
+                            setMenu(false);
+                          }}
+                          className="text-white hover:text-orange-500 transition cursor-pointer"
+                        >
+                          {text}
+                        </button>
+                      ) : (
+                        <Link to={to}>{text}</Link>
+                      )}
                     </li>
                   ))}
                 </ul>

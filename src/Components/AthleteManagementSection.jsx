@@ -12,8 +12,9 @@ const AthleteManagementSection = () => {
 
   return (
     <motion.div
+      id="services"
       ref={ref}
-      className="container mx-auto px-4 py-16 flex flex-col md:flex-row items-center justify-between gap-8"
+      className="container mx-auto px-4 py-16 flex flex-col md:flex-row items-center justify-between gap-8 scroll-mt-20"
       initial="hidden"
       animate={controls}
       variants={containerVariants}
