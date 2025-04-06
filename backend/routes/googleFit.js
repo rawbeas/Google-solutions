@@ -49,7 +49,7 @@ router.get('/callback', async (req, res) => {
  console.log("callbakc")
     if (!code || !state) {
       console.error('Missing OAuth parameters');
-      return res.redirect('/athlete?error=invalid_params');
+      return res.redirect(`${process.env.FRONTEND_URL}/athlete?error=invalid_params`);
     }
 
     const { tokens } = await oauth2Client.getToken(code);
@@ -76,7 +76,7 @@ router.get('/callback', async (req, res) => {
     
   } catch (error) {
     console.error('[Google Fit] Connection Error:', error.message);
-    res.redirect(`/athlete?error=connection_failed&details=${encodeURIComponent(error.message)}`);
+    res.redirect(`${process.env.FRONTEND_URL}/athlete?error=connection_failed&details=${encodeURIComponent(error.message)}`);
   }
 });
 
