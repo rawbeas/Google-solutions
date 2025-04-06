@@ -47,8 +47,8 @@ const Navbar = ({ userRole }) => {
         return [
           { id: 1, text: "Home", to: "/" },
           { id: 2, text: "Services", to: "/services", scroll: true },
-          { id: 3, text: "Work", to: "/work" },
-          { id: 4, text: "About Us", to: "/aboutus" },
+          // { id: 3, text: "Work", to: "/work" },
+          { id: 3, text: "About Us", to: "/aboutus" },
         ];
     }
   }, [userRole]);
@@ -74,7 +74,7 @@ const Navbar = ({ userRole }) => {
         className="container mx-auto hidden md:flex justify-between items-center py-5 px-7 backdrop-blur-lg bg-black/30 border-b border-gray-700 rounded-b-lg"
       >
         {/* Dynamic Logo */}
-        <div className="text-xl lg:text-2xl font-bold flex items-center gap-1">
+        <div className="text-xl lg:text-2xl font-bold flex-1">
           <Link
             to={userRole ? `/${userRole}` : "/"}
             className="text-white hover:text-orange-500 transition"
@@ -83,8 +83,8 @@ const Navbar = ({ userRole }) => {
           </Link>
         </div>
 
-        {/* Navigation Links */}
-        <ul className="hidden md:flex items-center space-x-6 list-none lg:text-base">
+        {/* Navigation Links - Centered */}
+        <ul className="hidden md:flex items-center justify-center space-x-6 list-none lg:text-base flex-1">
           {items.map(({ id, text, to, scroll }) => (
             <li
               key={id}
@@ -110,31 +110,33 @@ const Navbar = ({ userRole }) => {
         </ul>
 
         {/* Dynamic Auth Section */}
-        {userRole ? (
-          <div className="flex items-center gap-4">
+        <div className="flex-1 flex justify-end">
+          {userRole ? (
+            <div className="flex items-center gap-4">
+              <Link
+                to={`/${userRole}/profile`}
+                className="text-white hover:text-orange-500 transition"
+              >
+                Profile
+              </Link>
+              <button
+                onClick={() => {
+                  /* Add logout handler */
+                }}
+                className="md:text-base lg:text-lg bg-orange-500 hover:text-orange-300 transition px-4 py-2 rounded text-white"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
             <Link
-              to={`/${userRole}/profile`}
-              className="text-white hover:text-orange-500 transition"
-            >
-              Profile
-            </Link>
-            <button
-              onClick={() => {
-                /* Add logout handler */
-              }}
+              to="/signup"
               className="md:text-base lg:text-lg bg-orange-500 hover:text-orange-300 transition px-4 py-2 rounded text-white"
             >
-              Logout
-            </button>
-          </div>
-        ) : (
-          <Link
-            to="/signup"
-            className="md:text-base lg:text-lg bg-orange-500 hover:text-orange-300 transition px-4 py-2 rounded text-white"
-          >
-            Sign Up
-          </Link>
-        )}
+              Sign Up
+            </Link>
+          )}
+        </div>
       </motion.div>
 
       {/* Mobile Navbar */}

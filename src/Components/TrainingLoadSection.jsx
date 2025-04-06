@@ -29,23 +29,23 @@ const TrainingLoadSection = () => {
         className="text-white text-center mb-10 max-w-4xl mx-auto items-center justify-center"
         variants={itemVariants}
       >
-        Use our Performance Management tools to monitor the training load of
-        your athletes. Our indicators are a mix of proprietary algorithms as
-        well as practice-based algorithm to help you gain insights. Process your
-        training and game data and use tools like{" "}
-        <span className="text-red-500">RPE analysis</span>, A:C Ratio, overuse
-        indicators and workload periodisation to assist you in your decision
-        making.
+        Use our Performance Management tools to track key athlete metrics
+        including weight trends, predicted weight, overall health score, and
+        experience level. Get dynamic insights with features like weekly weight
+        predictions, health assessments, and athletic experience analysis—all
+        backed by smart algorithms. Integrate with Google Calendar to stay
+        updated on upcoming events and plan efficiently.
       </motion.p>
 
       <motion.div
-        className="w-full flex justify-center mb-8"
+        className="w-full max-w-4xl mx-auto flex justify-center mb-8"
         variants={itemVariants}
       >
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-mIf7kB5aMzt6mcFimcVXyuHBhuAJoCUnd_Rv-Gyjm4V4HXObnAfQYdys6_6aph6BATo&usqp=CAU"
+        <motion.img
+          src="./public/Athleteimg.png"
           alt="Training Load Management"
-          className="max-w-2xl w-full rounded-lg shadow-lg"
+          className="w-full  h-full object-cover rounded-lg shadow-xl"
+          whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
         />
       </motion.div>
     </motion.div>

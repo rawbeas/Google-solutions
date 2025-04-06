@@ -4,28 +4,28 @@ import { motion } from "framer-motion";
 const teamMembers = [
   {
     name: "Vineet",
-    role: "HEAD COACH",
-    image: "https://via.placeholder.com/150",
+    role: "Front End ",
+    image: "./public/Img1.png",
     description:
       "Aspiring software developer skilled in frontend development. ",
   },
   {
     name: "Harshit",
-    role: "SPORTS ANALYST",
-    image: "https://via.placeholder.com/150",
+    role: "Back End ",
+    image: "./public/Img2.png",
     description: "Giving my 100%, staying chill, and coding my way to success!",
   },
   {
     name: "Naman",
-    role: "FITNESS TRAINER",
-    image: "https://via.placeholder.com/150",
+    role: "Machine Learning",
+    image: "./public/Img3.png",
     description:
       "Interested in AI-ML and its real world applications. Tech enthusiast.",
   },
   {
     name: "Kritika ",
     role: "TEAM MANAGER",
-    image: "https://via.placeholder.com/150",
+    image: "./public/Img4.png",
     description: "Handling operations and logistics seamlessly.",
   },
 ];

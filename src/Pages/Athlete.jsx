@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import PredictionCard from "../Components/PredictionCard";
 import WeightChart from "../Components/WeightChart";
 import GoogleFitConnect from "../Components/GoogleFitConnect";
@@ -25,37 +26,43 @@ const Athlete = () => {
     }
     return item.value;
   };
-  
+
   const fetchData = async (forceRefresh = false) => {
     try {
       const token = localStorage.getItem("token");
-      console.log("token")
-      const userRes = await axios.get("http://localhost:5000/api/users/profile", {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { _: Date.now() } // Cache Bypass
-      });
-      console.log("request")
-      console.log(userRes.data)
+      console.log("token");
+      const userRes = await axios.get(
+        "http://localhost:5000/api/users/profile",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          params: { _: Date.now() }, // Cache Bypass
+        }
+      );
+      console.log("request");
+      console.log(userRes.data);
       setUser(userRes.data);
-      console.log("user")
-      console.log("user is connected",userRes.data.fitConnected)
+      console.log("user");
+      console.log("user is connected", userRes.data.fitConnected);
       if (userRes) {
-        console.log("Request to get data")
+        console.log("Request to get data");
         const [weightsRes, predictionsRes] = await Promise.all([
           axios.get("http://localhost:5000/api/google-fit/sync-weights", {
             headers: { Authorization: `Bearer ${token}` },
-            params: { refresh: forceRefresh }
+            params: { refresh: forceRefresh },
           }),
-          axios.get(`http://localhost:5000/api/athletes/${userRes.data._id}/predictions`, {
-            headers: { Authorization: `Bearer ${token}` }
-          })
+          axios.get(
+            `http://localhost:5000/api/athletes/${userRes.data._id}/predictions`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          ),
         ]);
-        console.log("predicted weights")
+        console.log("predicted weights");
 
         setWeights(weightsRes.data.data || []);
         setPredictions(predictionsRes.data || {});
         setIsMockData(weightsRes.data.isMock || false);
-        console.log("weights set")
+        console.log("weights set");
       }
     } catch (error) {
       console.error("Data fetch error:", error);
@@ -70,14 +77,14 @@ const Athlete = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    
+
     // Check if googlefit is stored
-  const fitStatus = getItemWithExpiry('googlefit');
-  
-  if (fitStatus) {
-    setGoogleFit(true);
-  }
-    if (params.get('fit_connected')) {
+    const fitStatus = getItemWithExpiry("googlefit");
+
+    if (fitStatus) {
+      setGoogleFit(true);
+    }
+    if (params.get("fit_connected")) {
       fetchData(true); // Force refresh after connection
       navigate(location.pathname, { replace: true }); // Clears URL params
     } else {
@@ -87,55 +94,66 @@ const Athlete = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+          <div className="h-6 bg-gray-800 rounded w-1/4"></div>
+          <div className="h-4 bg-gray-800 rounded w-1/2"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-purple-600 text-white py-4 shadow-md">
+    <div className="min-h-screen mt-20 bg-gray-900">
+      {/* <header className="bg-black/30 backdrop-blur-lg text-white py-4 shadow-md border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold">Athlete Dashboard</h1>
+          <h1 className="text-3xl font-bold text-orange-500">
+            Athlete Dashboard
+          </h1>
         </div>
-      </header>
+      </header> */}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* add condition to check if google sign too */}
         {googleFit && (
-  <p className="text-green-600 mb-4">Google Fit is connected!</p>
-)}
-{/* check if both user and google fit is there , then only show graphs */}
-        {user&&!googleFit ? (
-          <div className="bg-white p-6 rounded-lg shadow-md animate-fade-in">
-            <h2 className="text-xl font-semibold mb-4">Connect Google Fit</h2>
+          <p className="text-orange-500 mb-4">Google Fit is connected!</p>
+        )}
+
+        {user && !googleFit ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-black/30 backdrop-blur-lg p-6 rounded-lg shadow-md border border-gray-700"
+          >
+            <h2 className="text-xl font-semibold mb-4 text-orange-500">
+              Connect Google Fit
+            </h2>
             <GoogleFitConnect />
-            {new URLSearchParams(location.search).get('error') && (
+            {new URLSearchParams(location.search).get("error") && (
               <p className="text-red-500 mt-2 animate-shake">
-                Error: {new URLSearchParams(location.search).get('error')}
+                Error: {new URLSearchParams(location.search).get("error")}
               </p>
             )}
-          </div>
+          </motion.div>
         ) : (
           <div className="space-y-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-xl font-semibold mb-4">Weight Trends</h2>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-black/30 backdrop-blur-lg p-6 rounded-lg shadow-md border border-gray-700"
+            >
+              <h2 className="text-xl font-semibold mb-4 text-orange-500">
+                Weight Trends
+              </h2>
               {weights.length > 0 ? (
                 <WeightChart weights={weights} />
               ) : (
-                <div className="text-gray-500 italic p-4 border rounded">
-                  {isMockData ? (
-                    "Connected to Google Fit but no data found. Start tracking in the Google Fit app!"
-                  ) : (
-                    "Loading weight data..."
-                  )}
+                <div className="text-gray-400 italic p-4 border border-gray-700 rounded bg-black/20">
+                  {isMockData
+                    ? "Connected to Google Fit but no data found. Start tracking in the Google Fit app!"
+                    : "Loading weight data..."}
                 </div>
               )}
-            </div>
+            </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -159,10 +177,16 @@ const Athlete = () => {
                 />
               </div>
 
-              <div className="lg:col-span-1 bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4">Upcoming Events</h2>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="lg:col-span-1 bg-black/30 backdrop-blur-lg p-6 rounded-lg shadow-md border border-gray-700"
+              >
+                <h2 className="text-xl font-semibold mb-4 text-orange-500">
+                  Upcoming Events
+                </h2>
                 <GoogleCalendar />
-              </div>
+              </motion.div>
             </div>
           </div>
         )}

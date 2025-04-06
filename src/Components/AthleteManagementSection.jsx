@@ -33,9 +33,9 @@ const AthleteManagementSection = () => {
           className="text-white leading-relaxed"
           variants={itemVariants}
         >
-          The Topsportslab platform is an easy-to-use and customisable Athlete
-          Management System. Our platform is based on years of scientific
-          research and feedback from professionals on the field.
+          The platform is an easy-to-use and customisable Athlete Management
+          System. Our platform is based on years of scientific research and
+          feedback from professionals on the field.
         </motion.p>
 
         <motion.p
@@ -48,7 +48,7 @@ const AthleteManagementSection = () => {
           decision-making.
         </motion.p>
 
-        <Link to="/login">
+        <Link to="/signup">
           <motion.button
             className="bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-md transition duration-300"
             variants={itemVariants}
