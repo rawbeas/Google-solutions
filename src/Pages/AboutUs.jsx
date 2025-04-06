@@ -5,27 +5,27 @@ const teamMembers = [
   {
     name: "Vineet",
     role: "Front End ",
-    image: "./public/Img1.png",
+    image: "./Img1.png",
     description:
       "Aspiring software developer skilled in frontend development. ",
   },
   {
     name: "Harshit",
     role: "Back End ",
-    image: "./public/Img2.png",
+    image: "./Img2.png",
     description: "Giving my 100%, staying chill, and coding my way to success!",
   },
   {
     name: "Naman",
     role: "Machine Learning",
-    image: "./public/Img3.png",
+    image: "./Img3.png",
     description:
       "Interested in AI-ML and its real world applications. Tech enthusiast.",
   },
   {
     name: "Kritika ",
     role: "TEAM MANAGER",
-    image: "./public/Img4.png",
+    image: "./Img4.png",
     description: "Handling operations and logistics seamlessly.",
   },
 ];
