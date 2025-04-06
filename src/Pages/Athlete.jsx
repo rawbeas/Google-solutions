@@ -14,8 +14,9 @@ const Athlete = () => {
   const [loading, setLoading] = useState(true);
   const [isMockData, setIsMockData] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate(); // Replaces useHistory()
+  const navigate = useNavigate();
   const [googleFit, setGoogleFit] = useState(false);
+
   const getItemWithExpiry = (key) => {
     const itemStr = localStorage.getItem(key);
     if (!itemStr) return null;
@@ -30,45 +31,43 @@ const Athlete = () => {
   const fetchData = async (forceRefresh = false) => {
     try {
       const token = localStorage.getItem("token");
-      console.log("token");
+
       const userRes = await axios.get(
-        "http://localhost:5000/api/users/profile",
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/profile`,
         {
           headers: { Authorization: `Bearer ${token}` },
-          params: { _: Date.now() }, // Cache Bypass
+          params: { _: Date.now() },
         }
       );
-      console.log("request");
-      console.log(userRes.data);
+
       setUser(userRes.data);
-      console.log("user");
-      console.log("user is connected", userRes.data.fitConnected);
+
       if (userRes) {
-        console.log("Request to get data");
         const [weightsRes, predictionsRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/google-fit/sync-weights", {
-            headers: { Authorization: `Bearer ${token}` },
-            params: { refresh: forceRefresh },
-          }),
           axios.get(
-            `http://localhost:5000/api/athletes/${userRes.data._id}/predictions`,
+            `${import.meta.env.VITE_BACKEND_URL}/api/google-fit/sync-weights`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+              params: { refresh: forceRefresh },
+            }
+          ),
+          axios.get(
+            `${import.meta.env.VITE_BACKEND_URL}/api/athletes/${userRes.data._id}/predictions`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
           ),
         ]);
-        console.log("predicted weights");
 
         setWeights(weightsRes.data.data || []);
         setPredictions(predictionsRes.data || {});
         setIsMockData(weightsRes.data.isMock || false);
-        console.log("weights set");
       }
     } catch (error) {
       console.error("Data fetch error:", error);
       if (error.response?.status === 401) {
         localStorage.removeItem("token");
-        navigate("/login"); // Redirects to login on unauthorized error
+        navigate("/login");
       }
     } finally {
       setLoading(false);
@@ -77,16 +76,14 @@ const Athlete = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-
-    // Check if googlefit is stored
     const fitStatus = getItemWithExpiry("googlefit");
 
     if (fitStatus) {
       setGoogleFit(true);
     }
     if (params.get("fit_connected")) {
-      fetchData(true); // Force refresh after connection
-      navigate(location.pathname, { replace: true }); // Clears URL params
+      fetchData(true);
+      navigate(location.pathname, { replace: true });
     } else {
       fetchData();
     }
@@ -105,14 +102,6 @@ const Athlete = () => {
 
   return (
     <div className="min-h-screen mt-20 bg-gray-900">
-      {/* <header className="bg-black/30 backdrop-blur-lg text-white py-4 shadow-md border-b border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-orange-500">
-            Athlete Dashboard
-          </h1>
-        </div>
-      </header> */}
-
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {googleFit && (
           <p className="text-orange-500 mb-4">Google Fit is connected!</p>
