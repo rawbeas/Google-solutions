@@ -3,7 +3,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import { AiOutlineMenu } from "react-icons/ai";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { scrollToSection } from "../utils/scrollUtils";
+import { scrollToSection } from "../constants/scrollAnimation";
 
 const Navbar = ({ userRole }) => {
   const [menu, setMenu] = useState(false);

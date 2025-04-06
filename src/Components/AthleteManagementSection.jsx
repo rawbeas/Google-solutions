@@ -2,10 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
-import {
-  containerVariants,
-  itemVariants,
-} from "../constants/animationVariants";
+import { containerVariants, itemVariants } from "../constants/animation";
 
 const AthleteManagementSection = () => {
   const [ref, controls] = useScrollAnimation(0.1);
