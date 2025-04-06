@@ -33,7 +33,7 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/users/signup",
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/signup`,
         formData
       );
       localStorage.setItem("token", response.data.token);
